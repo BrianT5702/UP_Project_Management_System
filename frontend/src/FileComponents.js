@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef, useLayoutEffect } from
 import imageCompression from 'browser-image-compression';
 import './FileView.css';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = '/api';
 
 // =========================================================
 // CONFIGURATION

@@ -16,7 +16,7 @@ import AIChatWindow from './AIChatWindow';
 import StockPage from './StockPage';
 import { viewPanelAPI, getUserPosition } from '../src/apiService';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = '/api';
 
 const apiCall = async (endpoint, options = {}) => {
   try {
