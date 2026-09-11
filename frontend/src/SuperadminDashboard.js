@@ -292,10 +292,13 @@ function SuperadminDashboard() {
                                     <th>Must reset</th>
                                     <th>Failed attempts</th>
                                     <th>Created</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {users.map((user) => (
+                                {users.map((user) => {
+                                    const isProtected = String(user.position).toLowerCase() === 'superadmin' || user.id === data?.me?.id;
+                                    return (
                                     <tr key={user.id}>
                                         <td><strong>{user.username}</strong></td>
                                         <td>{user.position}</td>
@@ -307,8 +310,26 @@ function SuperadminDashboard() {
                                         <td>{Number(user.must_reset_password) === 1 ? 'Yes' : 'No'}</td>
                                         <td>{user.failed_login_attempts || 0}</td>
                                         <td>{formatDate(user.created_at)}</td>
+                                        <td className="sa-actions">
+                                            {isProtected ? (
+                                                <span className="sa-muted">Protected</span>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    className="sa-btn sa-btn-danger"
+                                                    disabled={busyKey === `delete-${user.id}`}
+                                                    onClick={() => {
+                                                        if (!window.confirm(`Remove account "${user.username}"? This cannot be undone.`)) return;
+                                                        runAction(`delete-${user.id}`, () => superadminAPI.deleteUser(user.id));
+                                                    }}
+                                                >
+                                                    Remove
+                                                </button>
+                                            )}
+                                        </td>
                                     </tr>
-                                ))}
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

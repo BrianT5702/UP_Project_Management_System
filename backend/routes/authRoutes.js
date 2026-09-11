@@ -600,4 +600,35 @@ router.put('/users/:id/unblock', requireSuperadmin, async (req, res) => {
     }
 });
 
+router.delete('/users/:id', requireSuperadmin, async (req, res) => {
+    const { id } = req.params;
+    const userId = Number(id);
+    if (!userId) {
+        return res.status(400).json({ error: 'Invalid user id' });
+    }
+    if (userId === Number(req.superadmin.id)) {
+        return res.status(403).json({ error: 'You cannot remove your own account' });
+    }
+
+    try {
+        const [rows] = await db.query(`SELECT ${USER_COLUMNS} FROM users WHERE id = ?`, [userId]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        const user = rows[0];
+        if (String(user.position).toLowerCase() === 'superadmin') {
+            return res.status(403).json({ error: 'Superadmin accounts cannot be removed' });
+        }
+
+        await db.query('DELETE FROM superadmin_approvals WHERE target_user_id = ? OR approver_id = ?', [userId, userId]);
+        await db.query('DELETE FROM password_reset_requests WHERE user_id = ?', [userId]);
+        await db.query('DELETE FROM users WHERE id = ?', [userId]);
+
+        res.json({ message: `Account ${user.username} removed`, username: user.username });
+    } catch (error) {
+        console.error('Delete user error:', error);
+        res.status(500).json({ error: 'Could not remove this account. It may still be linked to other records.' });
+    }
+});
+
 module.exports = router;

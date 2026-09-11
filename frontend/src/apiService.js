@@ -116,6 +116,7 @@ export const superadminAPI = {
     approvePasswordReset: (id) => apiRequest(`/auth/password-reset/${id}/approve`, { method: 'PUT' }),
     rejectPasswordReset: (id) => apiRequest(`/auth/password-reset/${id}/reject`, { method: 'PUT' }),
     unblockUser: (id) => apiRequest(`/auth/users/${id}/unblock`, { method: 'PUT' }),
+    deleteUser: (id) => apiRequest(`/auth/users/${id}`, { method: 'DELETE' }),
 };
 export const projectsAPI = {
     getAll: () => apiRequest('/projects'),
