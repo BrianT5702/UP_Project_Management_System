@@ -4,8 +4,6 @@ import './StockPage.css';
 
 const StockPage = () => {
   const [stockItems, setStockItems] = useState([]);
-  const [form, setForm] = useState({ quantity: '', width: '', length: '', source: 'cutting' });
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -90,28 +88,6 @@ const StockPage = () => {
 
   const clearFilters = () => {
     setFilters({ width: 'all', length: 'all', source: 'all' });
-  };
-
-  // ---- CRUD ----
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setSuccess('');
-    setLoading(true);
-    try {
-      const newItem = await stockAPI.create(form);
-      setStockItems(prev => [newItem, ...prev]);
-      setForm({ quantity: '', width: '', length: '', source: 'cutting' });
-      setSuccess('Stock item added successfully!');
-    } catch (err) {
-      setError(err.message || 'Failed to add stock');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const handleDelete = async (id) => {

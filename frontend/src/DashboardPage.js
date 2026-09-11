@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import * as XLSX from 'xlsx';
 import PanelSlab from './panelSlab';
 import Cutting from './Cutting';
 import Door from './Door';
@@ -14,6 +13,7 @@ import ExcelExtractor from './ExcelExtractor';
 import ReportGenerator from './ReportGenerator';
 import AIChatWindow from './AIChatWindow';
 import StockPage from './StockPage';
+import SuperadminDashboard from './SuperadminDashboard';
 import { viewPanelAPI, getUserPosition } from '../src/apiService';
 
 const API_BASE = '/api';
@@ -34,20 +34,27 @@ const apiCall = async (endpoint, options = {}) => {
 };
 
 const ROLE_ACCESS = {
+  superadmin: ['Superadmin', 'JobList', 'AdminPage', 'PanelSlab', 'Cutting', 'Door', 'Accessories', 'System', 'Transportation', 'StockPage', 'FileView'],
   admin: ['JobList', 'AdminPage', 'PanelSlab', 'Cutting', 'Door', 'Accessories', 'System', 'Transportation', 'StockPage', 'FileView'],
   panel: ['PanelSlab', 'StockPage'],
   panel_manager: ['PanelSlab', 'StockPage'],
   cutting: ['Cutting'],
+  cut: ['Cutting'],
   door: ['Door'],
   accessories: ['Accessories'],
   system: ['System'],
   transportation: ['Transportation'],
+  sale: ['JobList', 'FileView'],
 };
 
 const normalizePosition = (pos) =>
-  (pos || '').toLowerCase().trim().replace(/\s+/g, '_');
+  (pos || '').toLowerCase().trim().replace(/[\s-]+/g, '_');
 
-const getAllowedRoutes = (position) => ROLE_ACCESS[normalizePosition(position)] || [];
+const getAllowedRoutes = (position) => {
+  const normalized = normalizePosition(position);
+  if (normalized === 'super_admin') return ROLE_ACCESS.superadmin;
+  return ROLE_ACCESS[normalized] || [];
+};
 
 const real_getProjectsByStatus = async (status) => await apiCall(`/projects/status/${status}`);
 const real_createProject = async (newProject) => await apiCall('/projects', { method: 'POST', body: JSON.stringify(newProject) });
@@ -112,14 +119,6 @@ const EMPTY_PROJECT = {
   salesDetail: ''
 };
 
-const paymentColors = {
-  Done: '#10b981',
-  'Full Payment': '#3b82f6',
-  Deposit: '#f59e0b',
-  'Progress Claim': '#8b5cf6',
-  Retention: '#ef4444'
-};
-
 const useSimpleRouter = () => {
   const [path, setPath] = useState(window.location.hash.slice(1) || '/');
   const handleHashChange = useCallback(() => setPath(window.location.hash.slice(1) || '/'), []);
@@ -142,6 +141,7 @@ const useSimpleRouter = () => {
   else if (path === '/system') currentRoute = 'System';
   else if (path === '/notifications') currentRoute = 'NotificationPage';
   else if (path === '/admin') currentRoute = 'AdminPage';
+  else if (path === '/superadmin') currentRoute = 'Superadmin';
   else if (path === '/excel-extractor') currentRoute = 'ExcelExtractor';
   else if (path === '/report-generator') currentRoute = 'ReportGenerator';
   else if (path === '/stock') currentRoute = 'StockPage';
@@ -569,25 +569,6 @@ const BulkProjectCreator = ({ onSubmit, onCancel, getTodayDate, EMPTY_PROJECT })
   const [panelCountPromptIndex, setPanelCountPromptIndex] = useState(null);
   const [showPanelTableModal, setShowPanelTableModal] = useState(false);
   const [panelTableProjectIndex, setPanelTableProjectIndex] = useState(null);
-
-  const getDefaultPanelRow = () => ({
-    type: 'PIR',
-    thk: '100',
-    joint: 'Clip Joint',
-    front: 'PPGI',
-    back: 'PPGI',
-    frontThk: '0.5',
-    backThk: '0.5',
-    surface: 'RIB',
-    width: '1150',
-    length: '3000',
-    qty: '1',
-    cutting: '',
-    salesman: '',
-    application: '',
-    delivery: '',
-    notes: '',
-  });
 
   const handleCountSubmit = (e) => {
     e.preventDefault();
@@ -1358,123 +1339,6 @@ const BulkPanelTableModal = ({ projectNo, panelCount, onClose, onConfirm }) => {
               }}
               className="btn-primary"
             >
-              ✅ Confirm Panels
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const PanelTableModal = ({ projectNo, panelCount, onClose, onConfirm }) => {
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    const defaultRow = {
-      type: 'PIR',
-      thk: '100',
-      joint: 'Clip Joint',
-      front: 'PPGI',
-      back: 'PPGI',
-      frontThk: '0.5',
-      backThk: '0.5',
-      surface: 'RIB',
-      width: '1150',
-      length: '3000',
-      qty: '1',
-      cutting: '',
-      salesman: '',
-      application: '',
-      delivery: '',
-      notes: '',
-    };
-    setRows(Array(panelCount).fill().map(() => ({ ...defaultRow })));
-  }, [panelCount]);
-
-  const updateRow = (index, field, value) => {
-    const newRows = [...rows];
-    newRows[index][field] = value;
-    setRows(newRows);
-  };
-
-  return (
-    <div 
-      className="modal-overlay" 
-      onClick={onClose}
-      style={{ zIndex: 9999 }}
-    >
-      <div 
-        className="modal-content" 
-        onClick={e => e.stopPropagation()} 
-        style={{ maxWidth: '95vw', maxHeight: '90vh', display: 'flex', flexDirection: 'column', padding: 0, zIndex: 10000 }}
-      >
-        <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h3 style={{ margin: 0 }}>🖼️ Create {panelCount} Panels for {projectNo}</h3>
-            <p style={{ color: '#64748b', marginTop: '4px' }}>Fill in the details for each panel. Width and Length are required if Qty &gt; 0.</p>
-          </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#94a3b8' }}>✕</button>
-        </div>
-
-        <div style={{ overflowY: 'auto', padding: '16px 24px', flex: 1 }}>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
-              <thead>
-                <tr style={{ background: '#f1f5f9' }}>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '30px' }}>#</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Type</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '60px' }}>Thk (mm)</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '80px' }}>Joint</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Front</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Back</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '60px' }}>Ft Thk</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '60px' }}>Bk Thk</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Finish</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px', background: '#fffbeb' }}>Width*</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px', background: '#fffbeb' }}>Length*</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '50px' }}>Qty</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Cutting</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Salesman</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '70px' }}>Application</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '100px' }}>Delivery</th>
-                  <th style={{ padding: '6px 8px', border: '1px solid #e2e8f0', textAlign: 'left', minWidth: '80px' }}>Notes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, idx) => (
-                  <tr key={idx}>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0', textAlign: 'center' }}>{idx + 1}</td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.type || ''} onChange={e => updateRow(idx, 'type', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="PIR" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="number" value={row.thk || ''} onChange={e => updateRow(idx, 'thk', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="100" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.joint || ''} onChange={e => updateRow(idx, 'joint', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="Clip Joint" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.front || ''} onChange={e => updateRow(idx, 'front', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="PPGI" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.back || ''} onChange={e => updateRow(idx, 'back', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="PPGI" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="number" step="0.01" value={row.frontThk || ''} onChange={e => updateRow(idx, 'frontThk', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="0.5" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="number" step="0.01" value={row.backThk || ''} onChange={e => updateRow(idx, 'backThk', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="0.5" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.surface || ''} onChange={e => updateRow(idx, 'surface', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="RIB" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0', background: '#fffbeb' }}><input type="number" value={row.width || ''} onChange={e => updateRow(idx, 'width', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="1150" required /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0', background: '#fffbeb' }}><input type="number" value={row.length || ''} onChange={e => updateRow(idx, 'length', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="3000" required /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="number" value={row.qty || ''} onChange={e => updateRow(idx, 'qty', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} placeholder="1" /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.cutting || ''} onChange={e => updateRow(idx, 'cutting', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.salesman || ''} onChange={e => updateRow(idx, 'salesman', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.application || ''} onChange={e => updateRow(idx, 'application', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="date" value={row.delivery || ''} onChange={e => updateRow(idx, 'delivery', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} /></td>
-                    <td style={{ padding: '4px 8px', border: '1px solid #e2e8f0' }}><input type="text" value={row.notes || ''} onChange={e => updateRow(idx, 'notes', e.target.value)} style={{ width: '100%', border: 'none', background: 'transparent' }} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="modal-actions" style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', flexShrink: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ color: '#94a3b8', fontSize: '0.8rem' }}>
-            {rows.length} panel{rows.length !== 1 ? 's' : ''} to create
-          </div>
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button onClick={onClose} className="btn-ghost">Cancel</button>
-            <button onClick={() => onConfirm(rows)} className="btn-primary">
               ✅ Confirm Panels
             </button>
           </div>
@@ -2841,14 +2705,12 @@ const getPaymentStyle = (payment) => {
 // ==================== App ====================
 function App({ onLogout }) {
   const { navigate, currentRoute, params } = useSimpleRouter();
-  const [userPosition] = useState(() => getUserPosition());
+  const [userPosition, setUserPosition] = useState(() => getUserPosition());
   const allowedRoutes = getAllowedRoutes(userPosition);
-  const isAdmin = normalizePosition(userPosition) === 'admin';
+  const isSuperadmin = normalizePosition(userPosition) === 'superadmin' || normalizePosition(userPosition) === 'super_admin';
+  const isAdmin = normalizePosition(userPosition) === 'admin' || isSuperadmin;
   const getTodayDate = () => new Date().toISOString().split('T')[0];
   const [projects, setProjects] = useState([]);
-  const [newProject, setNewProject] = useState(EMPTY_PROJECT);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categoryFiles, setCategoryFiles] = useState({});
   const [editingProject, setEditingProject] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -2861,12 +2723,16 @@ function App({ onLogout }) {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const fileInputRef = useRef(null);
+
+  useEffect(() => {
+    setUserPosition(getUserPosition());
+  }, []);
 
   const [showBulkModal, setShowBulkModal] = useState(false);
   const [showBulkUpdateModal, setShowBulkUpdateModal] = useState(false);
 
   const [isAiSidebarOpen, setIsAiSidebarOpen] = useState(() => {
+    if (normalizePosition(getUserPosition()) === 'superadmin') return false;
     const saved = localStorage.getItem('aiSidebarOpen');
     return saved !== null ? JSON.parse(saved) : true;
   });
@@ -2880,9 +2746,9 @@ function App({ onLogout }) {
 
   const [isBatchPanelModalOpen, setIsBatchPanelModalOpen] = useState(false);
   const [batchPanelProject, setBatchPanelProject] = useState(null);
-  const [batchPanelStep, setBatchPanelStep] = useState('count');
+  const [, setBatchPanelStep] = useState('count');
   const [batchPanelCount, setBatchPanelCount] = useState(1);
-  const [batchPanelRows, setBatchPanelRows] = useState([]);
+  const [, setBatchPanelRows] = useState([]);
   const [batchPanelFormData, setBatchPanelFormData] = useState({});
   const [allPanelRefs, setAllPanelRefs] = useState([]);
 
@@ -2931,33 +2797,6 @@ function App({ onLogout }) {
     }
   }, []);
 
-  const openBatchPanelModal = (project) => {
-    setBatchPanelProject(project);
-    setBatchPanelCount(1);
-    setBatchPanelStep('count');
-    setBatchPanelRows([]);
-    setBatchPanelFormData({
-      job_no: project.projectNo || '',
-      type: 'PIR',
-      panel_thk: '100',
-      joint: 'Clip Joint',
-      surface_front: 'PPGI',
-      surface_back: 'PPGI',
-      surface_front_thk: '0.5',
-      surface_back_thk: '0.5',
-      surface_type: 'RIB',
-      width: '1150',
-      length: '3000',
-      qty: '',
-      cutting: '',
-      salesman: '',
-      application: '',
-      estimated_delivery: '',
-      notes: '',
-    });
-    setIsBatchPanelModalOpen(true);
-  };
-
   const closeBatchPanelModal = () => {
     setIsBatchPanelModalOpen(false);
     setBatchPanelProject(null);
@@ -2965,11 +2804,6 @@ function App({ onLogout }) {
     setBatchPanelStep('count');
     setBatchPanelRows([]);
     setBatchPanelFormData({});
-  };
-
-  const handleBatchPanelFormChange = (e) => {
-    const { name, value } = e.target;
-    setBatchPanelFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleBatchPanelSingleSubmit = async () => {
@@ -3032,7 +2866,7 @@ function App({ onLogout }) {
         if (panelData[key] === '') panelData[key] = null;
       });
 
-      const created = await viewPanelAPI.create(panelData);
+      await viewPanelAPI.create(panelData);
       addNotification(`✅ Created 1 panel (${ref}) with quantity ${qty}`);
       closeBatchPanelModal();
       await fetchAllPanelRefs();
@@ -3080,35 +2914,6 @@ function App({ onLogout }) {
       };
     }
   }, [isResizing, onResize, stopResize]);
-
-  useEffect(() => {
-    const margin = (parseFloat(newProject.sell) || 0) - (parseFloat(newProject.cost) || 0);
-    if (!isNaN(margin)) setNewProject(p => ({ ...p, margin: margin.toFixed(2) }));
-  }, [newProject.sell, newProject.cost]);
-
-  const initializeCategoryFiles = useCallback((categoryId) => {
-    if (!categoryFiles[categoryId]) setCategoryFiles(p => ({ ...p, [categoryId]: [] }));
-  }, [categoryFiles]);
-
-  const handleCategoryFileUpload = useCallback((categoryId, files) => {
-    setCategoryFiles(p => ({ ...p, [categoryId]: [...(p[categoryId] || []), ...files] }));
-  }, []);
-
-  const removeCategoryFile = useCallback((categoryId, fileIndex) => {
-    setCategoryFiles(p => { const arr = [...(p[categoryId] || [])]; arr.splice(fileIndex, 1); return { ...p, [categoryId]: arr }; });
-  }, []);
-
-  const clearCategoryFiles = useCallback((categoryId) => {
-    setCategoryFiles(p => ({ ...p, [categoryId]: [] }));
-  }, []);
-
-  const handleCategoryChange = useCallback((categories) => {
-    categories.forEach(id => { if (!selectedCategories.includes(id)) initializeCategoryFiles(id); });
-    selectedCategories.filter(cat => !categories.includes(cat)).forEach(id => {
-      setCategoryFiles(p => { const n = { ...p }; delete n[id]; return n; });
-    });
-    setSelectedCategories(categories);
-  }, [selectedCategories, initializeCategoryFiles]);
 
   useEffect(() => {
     if (!searchTerm.trim()) { setFilteredProjects(projects); return; }
@@ -3177,15 +2982,6 @@ function App({ onLogout }) {
     }
   };
 
-  const handleInputChange = (e) => { const { name, value } = e.target; setNewProject(p => ({ ...p, [name]: value })); };
-
-  const handleExcelProjectImport = ({ project, categories }) => {
-    setNewProject(prev => ({ ...prev, ...project }));
-    setSelectedCategories(categories);
-    setCategoryFiles(categories.reduce((acc, category) => ({ ...acc, [category]: categoryFiles[category] || [] }), {}));
-    addNotification('Excel row copied into the project form. Please review before creating.');
-  };
-
   const handleSaveEditedProject = async (updatedPayload) => {
     const updated = await real_updateProject(updatedPayload.id, updatedPayload);
     setProjects(p => p.map(pr => pr.id === updated.id ? { ...updated, completion: pr.completion } : pr));
@@ -3238,6 +3034,7 @@ function App({ onLogout }) {
   const openBulkUpdateModal = () => setShowBulkUpdateModal(true);
 
   const navItems = [
+    { path: '/superadmin', label: 'Superadmin', icon: '🛡️', route: 'Superadmin' },
     { path: '/', label: 'Project List', icon: '🏠', route: 'JobList' },
     { path: '/admin', label: 'Administration Projects', icon: '👨‍💼', route: 'AdminPage' },
     { path: '/panels', label: 'Panel / Slab', icon: '🖼️', route: 'PanelSlab' },
@@ -3261,9 +3058,33 @@ function App({ onLogout }) {
 
   if (isLoading && (currentRoute === 'JobList' || currentRoute === 'AdminPage')) {
     return (
-      <div className="loading-screen">
-        <div className="loading-spinner" />
-        <p>Loading projects…</p>
+      <div className="App sidebar-layout">
+        <aside className={`sidebar ${isSidebarOpen ? 'open' : 'closed'}`}>
+          <div className="sidebar-header">
+            {isSidebarOpen && (
+              <div className="sidebar-brand">
+                <div className="brand-text">
+                  <span className="brand-name">UnitedPanel</span>
+                  <span className="brand-sub">Project Manager</span>
+                </div>
+              </div>
+            )}
+          </div>
+          <nav className="sidebar-nav">
+            {visibleNavItems.map(item => (
+              <a key={item.path} href={`#${item.path}`} className={`nav-item ${currentRoute === item.route ? 'active' : ''}`}>
+                <span className="nav-icon">{item.icon}</span>
+                {isSidebarOpen && <span className="nav-label">{item.label}</span>}
+              </a>
+            ))}
+          </nav>
+        </aside>
+        <main className={`content-area ${isSidebarOpen ? 'shrunk' : 'expanded'}`}>
+          <div className="loading-screen">
+            <div className="loading-spinner" />
+            <p>Loading projects…</p>
+          </div>
+        </main>
       </div>
     );
   }
@@ -3502,11 +3323,12 @@ function App({ onLogout }) {
         {currentRoute === 'ExcelExtractor' && <ExcelExtractor />}
         {currentRoute === 'NotificationPage' && <NotificationPage notifications={notifications} removeNotification={id => setNotifications(p => p.filter(n => n.id !== id))} clearAllNotifications={() => setNotifications([])} showActivityLogs={false} />}
         {currentRoute === 'AdminPage' && <AdminPage projects={projects} navigate={navigate} />}
+        {currentRoute === 'Superadmin' && <SuperadminDashboard />}
         {currentRoute === 'StockPage' && <StockPage />}
       </main>
 
       {/* AI Sidebar – only for admin */}
-      {isAdmin && isAiSidebarOpen && (
+      {isAdmin && !isSuperadmin && isAiSidebarOpen && (
         <aside className="ai-sidebar" style={{ width: aiSidebarWidth, position: 'fixed', right: 0, top: 0, bottom: 0, zIndex: 1000, background: '#fff', boxShadow: '-2px 0 12px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column' }}>
           <div className="ai-sidebar-resize-handle" onMouseDown={startResize} style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '5px', cursor: 'ew-resize', background: 'transparent', zIndex: 10 }} />
           <AIChatWindow
@@ -3524,7 +3346,7 @@ function App({ onLogout }) {
       )}
 
       {/* AI FAB – only for admin */}
-      {isAdmin && !isAiSidebarOpen && (
+      {isAdmin && !isSuperadmin && !isAiSidebarOpen && (
         <button
           className="ai-chat-fab"
           onClick={() => setIsAiSidebarOpen(true)}

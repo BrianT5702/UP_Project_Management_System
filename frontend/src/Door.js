@@ -973,7 +973,7 @@ const Door = ({ navigate }) => {
     const [taskFiles, setTaskFiles] = useState([]);
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
     const [activeTab, setActiveTab] = useState('tasks');
@@ -1165,25 +1165,6 @@ const Door = ({ navigate }) => {
     const paginatedTasks = filteredTasks.slice(startIndex, endIndex);
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) setCurrentPage(page);
-    };
-
-    // ---------- Task CRUD ----------
-    const openCreateModal = () => {
-        setNewTask({
-            title: '',
-            description: '',
-            remark: '',
-            priority: 'medium',
-            status: 'pending',
-            project_no: uniqueProjectNos.length > 0 ? uniqueProjectNos[0] : '',
-            due_date: '',
-        });
-        setTaskItems([]);
-        setSelectedInventoryId('');
-        setItemQuantity('1');
-        setError(null);
-        setIsTaskModalOpen(true);
-        fetchInventoryList();
     };
 
     const closeCreateModal = () => {
@@ -1544,18 +1525,6 @@ const Door = ({ navigate }) => {
     };
 
     // ----- Delete media (all) -----
-    const handleDeleteMedia = async (taskId) => {
-        if (!window.confirm('Delete all uploaded media (image and signatures) for this task?')) return;
-        try {
-            await deleteAllMedia(taskId);
-            await fetchTasks();
-        } catch (err) {
-            console.error('Failed to delete media:', err);
-            setError('Failed to delete media. Please try again.');
-        }
-    };
-
-    // ----- View Media Modal -----
     const openViewMediaModal = (task) => {
         setViewMediaTask(task);
     };
@@ -1647,16 +1616,6 @@ const Door = ({ navigate }) => {
             case 'pending': return '#ffc107';
             default: return '#6c757d';
         }
-    };
-
-    const formatDate = (dateString) => {
-        if (!dateString) return 'Not set';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
     };
 
     const getSortIcon = (key) => {

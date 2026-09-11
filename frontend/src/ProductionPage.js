@@ -409,11 +409,6 @@ const ProductionPage = ({ onBack }) => {
     setTimeout(() => setSuccess(null), 5000);
   };
 
-  const openDetailModal = (record) => {
-    setSelectedRecordForDetail(record);
-    setIsDetailModalOpen(true);
-  };
-
   const closeDetailModal = () => {
     setIsDetailModalOpen(false);
     setSelectedRecordForDetail(null);

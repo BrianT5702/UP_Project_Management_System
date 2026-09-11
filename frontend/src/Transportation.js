@@ -715,7 +715,7 @@ const Transportation = ({ navigate }) => {
     const [editingTask, setEditingTask] = useState(null);
     const [viewMediaTask, setViewMediaTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
 
@@ -846,20 +846,6 @@ const Transportation = ({ navigate }) => {
     };
 
     // ---- modals ----
-    const openCreateModal = () => {
-        setNewTask({
-            title: '',
-            description: '',
-            remark: '',
-            priority: 'medium',
-            status: 'pending',
-            project_no: uniqueProjectNos.length > 0 ? uniqueProjectNos[0] : '',
-            due_date: '',
-        });
-        setError(null);
-        setIsTaskModalOpen(true);
-    };
-
     const closeCreateModal = () => {
         setIsTaskModalOpen(false);
         setError(null);
@@ -927,23 +913,6 @@ const Transportation = ({ navigate }) => {
 
     const closeViewMediaModal = () => {
         setViewMediaTask(null);
-    };
-
-    // Delete Media (all) – now always shown, but checks if any media exists
-    const handleDeleteMedia = async (taskId) => {
-        const task = tasks.find(t => t.id === taskId);
-        if (!task || (!task.imageUrl && !task.signatureUrl && !task.signature2Url)) {
-            alert('No media uploaded to delete.');
-            return;
-        }
-        if (!window.confirm('Delete all uploaded media (image and signatures) for this task?')) return;
-        try {
-            await deleteAllMedia(taskId);
-            await fetchTasks();
-        } catch (err) {
-            console.error('Failed to delete media:', err);
-            setError('Failed to delete media. Please try again.');
-        }
     };
 
     const handleUploadMedia = async (mediaData) => {

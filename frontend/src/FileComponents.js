@@ -238,7 +238,7 @@ export const FileView = ({ projectNo, navigateHome }) => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   // States for Hold & Replace
-  const [isTogglingHold, setIsTogglingHold] = useState(false);
+  const [, setIsTogglingHold] = useState(false);
   const [isReplacing, setIsReplacing] = useState({});
   const [isTogglingFileHold, setIsTogglingFileHold] = useState({});
   const [holdModalState, setHoldModalState] = useState({ isOpen: false, type: null, file: null });
@@ -381,12 +381,6 @@ export const FileView = ({ projectNo, navigateHome }) => {
       console.error("Failed to delete file:", err);
       setError(`Failed to delete ${file.file_name}.`);
     }
-  };
-
-  // ========== HOLD MODAL (Category-level & Per-file) ==========
-  const openCategoryHoldModal = () => {
-    if (!selectedCategory) return;
-    setHoldModalState({ isOpen: true, type: 'category', file: null });
   };
 
   const openFileHoldModal = (file) => {
@@ -709,7 +703,6 @@ export const FileView = ({ projectNo, navigateHome }) => {
     if (!isModalOpen) return null;
 
     const uploadSuccessful = compressionReport?.uploadStarted && compressionReport?.uploadSuccessful;
-    const uploadFailed = compressionReport?.uploadStarted && !compressionReport?.uploadSuccessful;
 
     return (
       <div className="modal-overlay" onClick={handleCloseModal}>

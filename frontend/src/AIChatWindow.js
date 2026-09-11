@@ -38,19 +38,6 @@ const AIChatWindow = ({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingMessage]);
 
-  const extractCreatedProjectNo = useCallback((text) => {
-    const patterns = [
-      /created.*?#?([A-Z0-9][-A-Z0-9]{1,30})/i,
-      /project\s+#?([A-Z0-9][-A-Z0-9]{1,30})/i,
-      /#([A-Z0-9][-A-Z0-9]{1,30})/,
-    ];
-    for (const pat of patterns) {
-      const m = text.match(pat);
-      if (m) return m[1];
-    }
-    return null;
-  }, []);
-
   const handleSendMessage = useCallback(() => {
     if (!inputValue.trim() || isLoading) return;
     const userMsg = inputValue.trim();
@@ -65,11 +52,6 @@ const AIChatWindow = ({
       sessionId,
       (acc) => setStreamingMessage(acc),
       (fullMessage, isMutation) => {
-        let createdProjectNo = null;
-        const lowerMsg = userMsg.toLowerCase();
-        if (isMutation && (lowerMsg.includes('create') || lowerMsg.includes('add')) && lowerMsg.includes('project')) {
-          createdProjectNo = extractCreatedProjectNo(fullMessage);
-        }
         setMessages(prev => [
           ...prev,
           {
@@ -92,7 +74,7 @@ const AIChatWindow = ({
         setIsLoading(false);
       }
     );
-  }, [inputValue, isLoading, sessionId, addNotification, fetchProjects, activeTab, extractCreatedProjectNo]);
+  }, [inputValue, isLoading, sessionId, addNotification, fetchProjects, activeTab]);
 
   const quickActions = [
     { label: '📦 Create Project', action: onBulkCreateClick },

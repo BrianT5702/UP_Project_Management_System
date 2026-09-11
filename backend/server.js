@@ -67,7 +67,7 @@ aiRouter = require('./routes/aiRouter');
 
 // ---------- Auth & Middleware ----------
 const authRoutes = require('./routes/authRoutes');
-const authMiddleware = require('./middleware/auth');
+const { ensureSuperadminInfrastructure } = require('./helpers/superadminSetup');
 
 // ---------- Express app ----------
 const app = express();
@@ -186,17 +186,27 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
-// ---------- Start server ----------
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`\n===========================================`);
-    console.log(`🚀 Server running on port: ${PORT}`);
-    console.log(`🔌 WebSocket enabled (non-AI)`);
-    console.log(`🤖 AI chat endpoint: POST /api/ai/chat`);
-    console.log(`🔐 Auth endpoints: /api/auth/register & /api/auth/login`);
-    console.log(`📦 Inventory API: /api/inventory`);
-    console.log(`📁 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`===========================================\n`);
-});
+async function startServer() {
+    try {
+        await ensureSuperadminInfrastructure();
+    } catch (error) {
+        console.error('⚠️ Superadmin setup failed:', error.message);
+    }
+
+    server.listen(PORT, '0.0.0.0', () => {
+        console.log(`\n===========================================`);
+        console.log(`🚀 Server running on port: ${PORT}`);
+        console.log(`🔌 WebSocket enabled (non-AI)`);
+        console.log(`🤖 AI chat endpoint: POST /api/ai/chat`);
+        console.log(`🔐 Auth endpoints: /api/auth/register & /api/auth/login`);
+        console.log(`🛡️ Superadmin dashboard: /api/auth/superadmin/dashboard`);
+        console.log(`📦 Inventory API: /api/inventory`);
+        console.log(`📁 Environment: ${process.env.NODE_ENV || 'development'}`);
+        console.log(`===========================================\n`);
+    });
+}
+
+startServer();
 
 process.on('SIGTERM', () => server.close(() => process.exit(0)));
 module.exports = server;

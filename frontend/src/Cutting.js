@@ -748,7 +748,7 @@ const Cutting = ({ navigate }) => {
     const [taskFiles, setTaskFiles] = useState([]);
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
     
@@ -876,19 +876,6 @@ const Cutting = ({ navigate }) => {
         }
     };
 
-    const openCreateModal = () => {
-        setNewTask({
-            title: '',
-            description: '',
-            priority: 'medium',
-            status: 'pending',
-            project_no: uniqueProjectNos.length > 0 ? uniqueProjectNos[0] : '',
-            due_date: '',
-        });
-        setError(null);
-        setIsTaskModalOpen(true);
-    };
-
     const closeCreateModal = () => {
         setIsTaskModalOpen(false);
         setError(null);
@@ -994,17 +981,6 @@ const Cutting = ({ navigate }) => {
         }
     };
 
-    const handleDeleteMedia = async (taskId) => {
-        if (!window.confirm('Delete all uploaded media (image and signatures) for this task?')) return;
-        try {
-            await deleteAllMedia(taskId);
-            await fetchTasks();
-        } catch (err) {
-            console.error('Failed to delete media:', err);
-            setError('Failed to delete media. Please try again.');
-        }
-    };
-
     const handleUploadMedia = async (mediaData) => {
         if (!uploadingTask) return;
         const { signature1, signature2, image } = mediaData;
@@ -1049,19 +1025,6 @@ const Cutting = ({ navigate }) => {
             setUploadMediaError('Failed to upload: ' + (err.message || 'Please try again.'));
         } finally {
             setIsUploadingMedia(false);
-        }
-    };
-
-    const handleDeleteImage = async (taskId) => {
-        if (!window.confirm('Are you sure you want to delete the image?')) return;
-        try {
-            await cuttingTasksAPI.deleteImage(taskId);
-            setTasks(prev => prev.map(task => 
-                task.id === taskId ? { ...task, imageUrl: null, imageDate: null } : task
-            ));
-        } catch (err) {
-            console.error('Failed to delete image:', err);
-            setError('Failed to delete image. Please try again.');
         }
     };
 

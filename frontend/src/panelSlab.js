@@ -298,41 +298,6 @@ const UploadMediaModal = ({
     const sig2Uploaded = !!task?.signature2Uploader;    // saved signature 2 exists
     const hasExistingImage = !!task?.imageUrl;           // saved image exists
 
-    // Helper: check if a canvas has any non‑white pixels
-    const isCanvasEmpty = (canvas) => {
-        if (!canvas) return true;
-        const ctx = canvas.getContext('2d');
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for (let i = 0; i < data.length; i += 4) {
-            if (data[i] < 250 || data[i+1] < 250 || data[i+2] < 250) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-    // Determine if there is any signature content (existing or newly drawn)
-    const hasSignatureContent = () => {
-        const canvas1 = canvasRef1.current;
-        const canvas2 = canvasRef2.current;
-        const sig1Drawn = canvas1 ? !isCanvasEmpty(canvas1) : false;
-        const sig2Drawn = canvas2 ? !isCanvasEmpty(canvas2) : false;
-        return sig1Uploaded || sig2Uploaded || sig1Drawn || sig2Drawn;
-    };
-
-    // Determine if signature 1 is present (existing or newly drawn)
-    const hasSignature1Content = () => {
-        const canvas1 = canvasRef1.current;
-        const sig1Drawn = canvas1 ? !isCanvasEmpty(canvas1) : false;
-        return sig1Uploaded || sig1Drawn;
-    };
-
-    // Determine if there is an image (existing or newly selected)
-    const hasImageContent = () => {
-        return hasExistingImage || imageFile !== null || imagePreview !== null;
-    };
-
     // ★★★ CRITICAL: show downstream ONLY when signature 1 AND image are ALREADY SAVED ★★★
     const showDownstream = sig1Uploaded && hasExistingImage;
 
@@ -428,7 +393,7 @@ const UploadMediaModal = ({
         setDrawingState(prev => !prev);
     };
 
-    const [drawingState, setDrawingState] = useState(false);
+    const [, setDrawingState] = useState(false);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -839,7 +804,7 @@ const PanelSlab = ({ onBackToProjects, onPanelEditLockChange }) => {
     const [taskFiles, setTaskFiles] = useState([]);
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [isUploadingMedia, setIsUploadingMedia] = useState(false);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
@@ -1078,19 +1043,6 @@ const PanelSlab = ({ onBackToProjects, onPanelEditLockChange }) => {
         }
     };
 
-    const handleDeleteImage = async (taskId) => {
-        if (!window.confirm('Are you sure you want to delete the image?')) return;
-        try {
-            await panelTasksAPI.deleteImage(taskId);
-            setTasks(prev => prev.map(task => 
-                task.id === taskId ? { ...task, imageUrl: null, imageDate: null } : task
-            ));
-        } catch (err) {
-            console.error('Failed to delete image:', err);
-            setError('Failed to delete image. Please try again.');
-        }
-    };
-
     // NEW: open view files modal and fetch files
     const openViewFilesModal = async (task) => {
         setViewFilesTask(task);
@@ -1192,11 +1144,6 @@ const PanelSlab = ({ onBackToProjects, onPanelEditLockChange }) => {
             project_no: '',
             due_date: '',
         });
-    };
-
-    const openCreateModal = () => {
-        setIsTaskModalOpen(true);
-        setError(null);
     };
 
     const openEditModal = (task) => {
@@ -1451,16 +1398,6 @@ const PanelSlab = ({ onBackToProjects, onPanelEditLockChange }) => {
 
     const goBackToPanelSlabFromProduction = () => {
         setShowProductionPage(false);
-    };
-
-    const formatDate = (dateString) => {
-        if (!dateString) return 'Not set';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        });
     };
 
     if (showViewPanel) {

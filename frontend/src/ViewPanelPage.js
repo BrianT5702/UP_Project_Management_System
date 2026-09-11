@@ -719,7 +719,7 @@ const JobOverviewContent = ({
 // =========================================================
 // Main ViewPanelPage Component (UPDATED with Pagination & Scroll Fix)
 // =========================================================
-const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
+const ViewPanelPage = ({ onBack, onEditingChange }) => {
     const navigate = useNavigate();
     const [panels, setPanels] = useState([]);
     const [allProductionRecords, setAllProductionRecords] = useState([]);
@@ -738,7 +738,6 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
     const [productionMeterDate, setProductionMeterDate] = useState('');
     const [isAddingNew, setIsAddingNew] = useState(false);
     const [newRowData, setNewRowData] = useState(null);
-    const [productionDetailModal, setProductionDetailModal] = useState(null);
     const [allProjects, setAllProjects] = useState([]);
     const [productionModalFromMeter, setProductionModalFromMeter] = useState(null);
     const [dailyProductionMeter, setDailyProductionMeter] = useState({
@@ -756,13 +755,9 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
     const [activeView, setActiveView] = useState('table');
     const [expandedGroups, setExpandedGroups] = useState(new Set());
 
-    const [activeFilterColumn, setActiveFilterColumn] = useState(null);
-    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
-    const portalDropdownRef = useRef(null);
-
     const [editingRowId, setEditingRowId] = useState(null);
     const [editedRowData, setEditedRowData] = useState(null);
-    const [editError, setEditError] = useState(null);
+    const [, setEditError] = useState(null);
     const [editSuccess, setEditSuccess] = useState(null);
     useEffect(() => {
         onEditingChange?.(Boolean(editingRowId) || isAddingNew);
@@ -865,12 +860,12 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
         estimated_delivery: ''
     });
 
-    const [sortConfig, setSortConfig] = useState({
+    const [sortConfig] = useState({
         key: 'created_at',
         direction: 'desc'
     });
 
-    const [uniqueValues, setUniqueValues] = useState({
+    const [, setUniqueValues] = useState({
         jobNos: [],
         types: [],
         salesmen: [],
@@ -892,9 +887,8 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
         brands: []
     });
 
-    const [productionRefs, setProductionRefs] = useState([]);
+    const [, setProductionRefs] = useState([]);
     const createModalRef = useRef(null);
-    const inputRefs = useRef([]);
 
     const formatDateForInput = (timestamp) => {
         if (!timestamp) return '';
@@ -1160,18 +1154,6 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
         setEditSuccess(null);
     };
 
-    const handleAddNewPanel = (job) => {
-        const initialNewRow = {};
-        jobOverviewColumns.forEach(col => {
-            if (col.type !== 'computed' && col.key !== 'prod') {
-                if (col.key === 'job_no') initialNewRow.job_no = job;
-                else initialNewRow[col.key] = '';
-            }
-        });
-        setNewRowData(initialNewRow);
-        setIsAddingNew(true);
-    };
-
     const handleSaveNewPanel = async () => {
         if (!newRowData) return;
         let jobNo = newRowData.job_no?.trim();
@@ -1297,11 +1279,6 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
             });
         }
     }, [productionMeterDate, allProductionRecords, estimatedRunningSpeed]);
-
-    const getCustomerByJobNo = (jobNo) => {
-        if (!jobNo) return null;
-        return allProjects.find(p => p.project_no === jobNo || p.job_no === jobNo || p.projectNo === jobNo) || null;
-    };
 
     useEffect(() => {
         if (allProjects.length > 0 && panels.length > 0) {
@@ -1671,12 +1648,8 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
     const selectAllColumns = () => setColumns(prev => prev.map(col => ({ ...col, visible: true })));
     const deselectAllColumns = () => setColumns(prev => prev.map(col => ({ ...col, visible: col.alwaysVisible ? true : false })));
 
-    const handleEditInputChange = (e) => { const { name, value } = e.target; setEditingPanel(prev => ({ ...prev, [name]: value })); };
     const handleNewPanelInputChange = (e) => { const { name, value } = e.target; setNewPanel(prev => ({ ...prev, [name]: value })); };
-    const handleFilterChange = (e) => { const { name, value } = e.target; setFilters(prev => ({ ...prev, [name]: value })); };
     const handleProductionMeterDateChange = (e) => setProductionMeterDate(e.target.value);
-    const handleSearchChange = (e) => setFilters(prev => ({ ...prev, search: e.target.value }));
-    const handleSort = (key) => setSortConfig(prev => ({ key, direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc' }));
 
     const handleUpdatePanel = async (e) => {
         e.preventDefault();
@@ -1756,25 +1729,6 @@ const ViewPanelPage = ({ onBack, onEditingChange, onCloseAiSidebar }) => {
 
     const openProductionModal = (panel) => setSelectedPanelForProduction(panel);
     const closeProductionModal = () => setSelectedPanelForProduction(null);
-    const openEditModal = (panel) => {
-        if (onCloseAiSidebar) {
-            onCloseAiSidebar();
-        }
-         setEditingPanel({ ...panel, job_no: panel.job_no || '', application: panel.application || '', type: panel.type || '',
-            panel_thk: panel.panel_thk || '', joint: panel.joint || '', surface_front: panel.surface_front || '',
-            surface_back: panel.surface_back || '', surface_front_thk: panel.surface_front_thk || '',
-            surface_back_thk: panel.surface_back_thk || '', surface_type: panel.surface_type || '',
-            width: panel.width || '', length: panel.length || '', qty: panel.qty || '', cutting: panel.cutting || '',
-            production_meter: panel.production_meter || '',
-            estimated_delivery: formatDateForInput(panel.estimated_delivery) || '',
-            created_at: formatDateForInput(panel.created_at) || '', salesman: panel.salesman || '',
-            brand: panel.brand || '',
-            notes: panel.notes || '' });
-        setIsEditModalOpen(true);
-        setError(null);
-
-    };
-    const openCreateModal = () => { setIsCreateModalOpen(true); setError(null); setSuccess(null); setNewPanel({...defaultPanelValues}); };
     const closeEditModal = () => { setIsEditModalOpen(false); setEditingPanel(null); setError(null); };
     const closeCreateModal = () => { setIsCreateModalOpen(false); setNewPanel({...defaultPanelValues}); setError(null); setSuccess(null); };
 

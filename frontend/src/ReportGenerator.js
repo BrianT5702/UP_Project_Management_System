@@ -470,22 +470,6 @@ const ReportGenerator = () => {
         }, 10);
     };
 
-    // Handle cell editing via F2 or direct typing
-    const handleCellDirectEdit = useCallback(() => {
-        const { row, col } = activeCell;
-        const cell = gridData[row][col];
-        const cellValue = cell.formula || cell.value || '';
-        setFormulaBarValue(cellValue);
-        setIsEditing(true);
-        
-        setTimeout(() => {
-            if (formulaInputRef.current) {
-                formulaInputRef.current.focus();
-                formulaInputRef.current.select();
-            }
-        }, 10);
-    }, [activeCell, gridData]);
-
     // Handle finishing cell edit
     const handleCellEditFinish = (row, col, newValue = null) => {
         if (isEditing || newValue !== null) {
@@ -770,8 +754,6 @@ const ReportGenerator = () => {
                 try {
                     // Handle ranges like A1:A10
                     if (range.includes(':')) {
-                        const [startRef, endRef] = range.split(':');
-                        // For now, just return placeholder
                         return '0';
                     }
                     // Handle comma-separated values
@@ -785,9 +767,6 @@ const ReportGenerator = () => {
                     return '0';
                 }
             });
-            
-            // Handle basic arithmetic
-            const operators = ['+', '-', '*', '/', '^'];
             
             // Evaluate the expression
             try {
@@ -1043,24 +1022,6 @@ const ReportGenerator = () => {
         // Update the sheet data
         saveToHistory(newGridData);
         setCellStyle(prev => ({ ...prev, backgroundColor: color }));
-    };
-
-    // Handle text alignment change
-    const handleTextAlignChange = (alignment) => {
-        const { row, col } = activeCell;
-        const newGridData = [...gridData];
-        
-        newGridData[row][col] = {
-            ...newGridData[row][col],
-            style: {
-                ...newGridData[row][col].style,
-                textAlign: alignment
-            }
-        };
-        
-        // Update the sheet data
-        saveToHistory(newGridData);
-        setCellStyle(prev => ({ ...prev, textAlign: alignment }));
     };
 
     // Apply text alignment to selected cells

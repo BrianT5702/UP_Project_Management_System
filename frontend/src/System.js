@@ -773,7 +773,7 @@ const System = ({ navigate }) => {
     const [taskFiles, setTaskFiles] = useState([]);
     const [isLoadingFiles, setIsLoadingFiles] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
 
@@ -904,20 +904,6 @@ const System = ({ navigate }) => {
     };
 
     // ---- modals ----
-    const openCreateModal = () => {
-        setNewTask({
-            title: '',
-            description: '',
-            remark: '',
-            priority: 'medium',
-            status: 'pending',
-            project_no: uniqueProjectNos.length > 0 ? uniqueProjectNos[0] : '',
-            due_date: '',
-        });
-        setError(null);
-        setIsTaskModalOpen(true);
-    };
-
     const closeCreateModal = () => {
         setIsTaskModalOpen(false);
         setError(null);
@@ -1028,18 +1014,6 @@ const System = ({ navigate }) => {
     };
 
     // ---- Delete media (all) ----
-    const handleDeleteMedia = async (taskId) => {
-        if (!window.confirm('Delete all uploaded media (image and signatures) for this task?')) return;
-        try {
-            await deleteAllMedia(taskId);
-            await fetchTasks();
-        } catch (err) {
-            console.error('Failed to delete media:', err);
-            setError('Failed to delete media. Please try again.');
-        }
-    };
-
-    // ---- Upload media ----
     const handleUploadMedia = async (mediaData) => {
         if (!uploadingTask) return;
         const { signature1, signature2, image } = mediaData;

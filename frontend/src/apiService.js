@@ -1,18 +1,5 @@
 const BASE_URL = '/api';
 
-// Helper to handle standard API responses
-const handleResponse = async (response) => {
-    if (!response.ok) {
-        const errorBody = await response.json().catch(() => ({}));
-        const errorMessage = errorBody.error || response.statusText;
-        throw new Error(`API Request Failed (${response.status}): ${errorMessage}`);
-    }
-    if (response.status === 204) {
-        return null;   // ✅ No content
-    }
-    return response.json();
-};
-
 const getAuthToken = () => {
   const session = localStorage.getItem('unitedpanel_session') || sessionStorage.getItem('unitedpanel_session');
   if (session) {
@@ -38,7 +25,15 @@ export const getCurrentUser = () => {
 
 export const getUserPosition = () => {
   const user = getCurrentUser();
-  return user?.position || user?.role || null;
+  if (user?.position || user?.role) return user.position || user.role;
+  const token = getAuthToken();
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return payload.position || payload.role || null;
+  } catch {
+    return null;
+  }
 };
 
 // Generic API request function
@@ -80,7 +75,9 @@ const apiRequest = async (endpoint, options = {}) => {
 
         if (!response.ok) {
             const errorMessage = data.error || data.message || response.statusText;
-            throw new Error(errorMessage);
+            const error = new Error(errorMessage);
+            error.code = data.code;
+            throw error;
         }
 
         return data;
@@ -105,6 +102,20 @@ export const authAPI = {
         body: userData,
         skipAuth: true,
     }),
+    requestPasswordReset: (payload) => apiRequest('/auth/password-reset/request', {
+        method: 'POST',
+        body: payload,
+        skipAuth: true,
+    }),
+};
+
+export const superadminAPI = {
+    getDashboard: () => apiRequest('/auth/superadmin/dashboard'),
+    approveSignup: (id) => apiRequest(`/auth/users/${id}/approve`, { method: 'PUT' }),
+    rejectSignup: (id) => apiRequest(`/auth/users/${id}/reject`, { method: 'PUT' }),
+    approvePasswordReset: (id) => apiRequest(`/auth/password-reset/${id}/approve`, { method: 'PUT' }),
+    rejectPasswordReset: (id) => apiRequest(`/auth/password-reset/${id}/reject`, { method: 'PUT' }),
+    unblockUser: (id) => apiRequest(`/auth/users/${id}/unblock`, { method: 'PUT' }),
 };
 export const projectsAPI = {
     getAll: () => apiRequest('/projects'),

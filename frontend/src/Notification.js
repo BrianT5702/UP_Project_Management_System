@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
-    Bell, CheckCircle, AlertTriangle, MessageSquare, 
-    Briefcase, Loader2, Search, Calendar, RefreshCw,
-    Check, AlertCircle
+    Bell, CheckCircle, AlertTriangle, MessageSquare,
+    Briefcase, Search, AlertCircle
 } from 'lucide-react';
 import './Notification.css';
 
@@ -182,7 +181,7 @@ const App = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [filter, setFilter] = useState('all');
+    const filter = 'all';
     const [unreadCount, setUnreadCount] = useState(0);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');

@@ -511,7 +511,7 @@ const StripeCurtain = ({ navigate }) => {
     const [isUploadingMedia, setIsUploadingMedia] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [isProjectsLoading, setIsProjectsLoading] = useState(true);
+    const [, setIsProjectsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [uploadMediaError, setUploadMediaError] = useState(null);
 
@@ -623,19 +623,6 @@ const StripeCurtain = ({ navigate }) => {
         return filtered;
     }, [tasks, filters, sortConfig]);
 
-    const openCreateModal = () => {
-        setNewTask({
-            title: '',
-            description: '',
-            priority: 'medium',
-            status: 'pending',
-            project_no: uniqueProjectNos.length > 0 ? uniqueProjectNos[0] : '',
-            due_date: '',
-        });
-        setError(null);
-        setIsTaskModalOpen(true);
-    };
-
     const closeCreateModal = () => {
         setIsTaskModalOpen(false);
         setError(null);
@@ -698,21 +685,6 @@ const StripeCurtain = ({ navigate }) => {
             setUploadMediaError('Failed to upload: ' + (err.message || 'Please try again.'));
         } finally {
             setIsUploadingMedia(false);
-        }
-    };
-
-    const handleDeleteImage = async (taskId) => {
-        if (!window.confirm('Are you sure you want to delete the image?')) return;
-
-        try {
-            await stripCurtainTasksAPI.deleteImage(taskId);
-            // Update local state to remove imageUrl
-            setTasks(prev => prev.map(task =>
-                task.id === taskId ? { ...task, imageUrl: null, imageDate: null } : task
-            ));
-        } catch (err) {
-            console.error('Failed to delete image:', err);
-            setError('Failed to delete image. Please try again.');
         }
     };
 

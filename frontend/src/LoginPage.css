@@ -123,9 +123,28 @@
   transition: color 0.2s;
 }
 
-.forgot-link:hover {
+.forgot-link-btn {
+  background: none;
+  border: none;
+  color: #6366f1;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.forgot-link-btn:hover {
   color: #4f46e5;
   text-decoration: underline;
+}
+
+.login-reset-hint {
+  text-align: center;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  margin: -8px 0 18px;
 }
 
 .login-error {
