@@ -1,0 +1,81 @@
+.production-page-container {
+  padding: 1rem;
+}
+.filters-section {
+  margin-bottom: 1rem;
+}
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.summary-card {
+  background: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  min-width: 100px;
+}
+.summary-label {
+  display: block;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+.summary-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.table-wrapper {
+  overflow-x: auto;
+}
+.production-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.production-table th,
+.production-table td {
+  padding: 0.5rem;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+.production-table th {
+  cursor: pointer;
+  background: #f1f3f5;
+}
+.production-table th:hover {
+  background: #e9ecef;
+}
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.75rem;
+  text-transform: capitalize;
+}
+.empty-row {
+  text-align: center;
+  color: #6c757d;
+  padding: 2rem;
+}
+
+.status-select {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.85rem;
+  cursor: pointer;
+  background: white;
+  min-width: 110px;
+}

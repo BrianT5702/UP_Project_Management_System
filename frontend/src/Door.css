@@ -1,0 +1,111 @@
+/* Door.css – overrides and additions for the Door component */
+
+/* Table column width management */
+.door-title-col {
+    min-width: 220px;
+    max-width: 300px;
+}
+.door-project-col { min-width: 100px; }
+.door-priority-col { min-width: 80px; }
+.door-status-col { min-width: 130px; }
+.door-inventory-col { min-width: 160px; }
+.door-actions-col { min-width: 200px; }
+
+/* Title cell with remark wrapping */
+.door-title-cell {
+    min-width: 220px;
+    max-width: 300px;
+    word-wrap: break-word;
+    vertical-align: top;
+}
+
+.door-title-cell .task-title-main {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Door.css – updated remark highlight */
+.door-remark {
+    font-size: 0.8rem;
+    color: #1e293b;                /* darker text for contrast */
+    background-color: #fef9c3;     /* soft yellow highlight */
+    padding: 2px 8px;
+    border-left: 3px solid #eab308; /* gold left border */
+    border-radius: 4px;
+    margin-top: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 2.8em;
+    line-height: 1.4;
+    word-break: break-word;
+    font-weight: 500;              /* slightly bolder */
+}
+
+/* Uploader info (media indicator) */
+.image-indicator {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 6px;
+}
+
+.image-indicator .image-badge {
+    background: #e2e8f0;
+    padding: 0 6px;
+    border-radius: 4px;
+}
+
+/* Inventory list inside table */
+.inventory-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 80px;
+    overflow-y: auto;
+}
+
+.inventory-item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8rem;
+}
+
+.inventory-item-badge {
+    background: #f1f5f9;
+    padding: 1px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    color: #1e293b;
+    white-space: nowrap;
+}
+
+/* Action buttons (keep them compact) */
+.action-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+}
+.action-btn:hover {
+    background: #f1f5f9;
+}
+.action-btn.delete-task-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+}
+

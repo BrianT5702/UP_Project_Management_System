@@ -1,0 +1,130 @@
+/* --- MultiPhotoUploader.css Additions --- */
+
+.drop-zone {
+  border: 2px dashed #007bff;
+  border-radius: 10px;
+  padding: 30px;
+  text-align: center;
+  margin-bottom: 20px;
+  background-color: #f8faff;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.drop-zone.drag-over {
+  background-color: #e6f7ff;
+  border-color: #0056b3;
+  box-shadow: 0 0 15px rgba(0, 123, 255, 0.2);
+}
+
+.drop-zone p {
+  margin-bottom: 15px;
+  font-size: 1.1em;
+  color: #555;
+}
+
+/* Adjust the existing select-button if it's inside the drop-zone */
+.drop-zone .select-button {
+  margin-bottom: 0; /* Remove margin-bottom if it's there */
+}
+
+.upload-for-job {
+  font-size: 1.2em;
+  color: #666;
+  margin-top: -10px; /* Adjust spacing */
+  margin-bottom: 20px;
+}
+
+/* Existing styles below (from previous updates) */
+.uploader-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  background-color: #fff;
+}
+
+.select-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  /* margin-bottom: 20px; <-- REMOVE this if it causes issues inside drop-zone */
+}
+
+.select-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.upload-button {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.upload-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.upload-button.uploading {
+  background-color: #ffc107;
+}
+
+.previews-area {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 10px;
+  border: 1px dashed #ddd;
+  border-radius: 5px;
+}
+
+.preview-card {
+  width: 150px;
+  border: 1px solid #eee;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.file-name {
+  font-size: 12px;
+  margin: 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.remove-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 8px;
+  font-size: 12px;
+  border-radius: 3px;
+  cursor: pointer;
+}

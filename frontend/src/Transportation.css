@@ -1,0 +1,152 @@
+/* =========================================================
+   TRANSPORTATION ACTION BUTTONS – 2 per row, 2 rows
+   ========================================================= */
+.transportation-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, 44px) !important;
+  grid-auto-rows: 44px !important;
+  grid-auto-flow: row !important;
+  gap: 16px !important;                      /* Bigger gap – no touching */
+  justify-content: center !important;
+  align-items: center !important;
+  justify-items: center !important;
+  max-width: 140px !important;               /* 44 + 16 + 44 = 104, 140 gives plenty of room */
+  min-width: 120px !important;               /* Ensures it doesn't collapse */
+  margin: 0 auto !important;
+  width: auto !important;
+}
+
+.transportation-actions button {
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;                /* Force minimum size */
+  min-height: 44px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  font-size: 1.2rem !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  background: #f1f3f5 !important;
+  color: #343a40 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
+  line-height: 1 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+
+.transportation-actions button:hover {
+  transform: scale(1.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 2 !important;
+}
+.transportation-actions button:active {
+  transform: scale(0.95) !important;
+}
+
+/* Individual button colours */
+.transportation-actions .view-btn {
+  background: #6c757d !important;
+  color: white !important;
+}
+.transportation-actions .view-btn:hover {
+  background: #5a6268 !important;
+}
+
+.transportation-actions .edit-btn {
+  background: #ffc107 !important;
+  color: #212529 !important;
+}
+.transportation-actions .edit-btn:hover {
+  background: #e0a800 !important;
+}
+
+.transportation-actions .upload-btn {
+  background: #28a745 !important;
+  color: white !important;
+}
+.transportation-actions .upload-btn:hover {
+  background: #218838 !important;
+}
+
+.transportation-actions .delete-task-btn {
+  background: #dc3545 !important;
+  color: white !important;
+}
+.transportation-actions .delete-task-btn:hover {
+  background: #c82333 !important;
+}
+
+/* ---------- Responsive tweaks ---------- */
+@media (max-width: 768px) {
+  .transportation-actions {
+    grid-template-columns: repeat(2, 38px) !important;
+    grid-auto-rows: 38px !important;
+    gap: 12px !important;
+    max-width: 110px !important;
+    min-width: 100px !important;
+  }
+  .transportation-actions button {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 6px !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .transportation-actions {
+    grid-template-columns: repeat(2, 34px) !important;
+    grid-auto-rows: 34px !important;
+    gap: 10px !important;
+    max-width: 90px !important;
+    min-width: 80px !important;
+  }
+  .transportation-actions button {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    min-height: 34px !important;
+    border-radius: 4px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+/* ---------- Dark mode support ---------- */
+@media (prefers-color-scheme: dark) {
+  .transportation-actions button {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+  }
+  .transportation-actions .view-btn {
+    background: #4a5568 !important;
+  }
+  .transportation-actions .view-btn:hover {
+    background: #5a6578 !important;
+  }
+  .transportation-actions .edit-btn {
+    background: #b7950b !important;
+  }
+  .transportation-actions .edit-btn:hover {
+    background: #9e8208 !important;
+  }
+  .transportation-actions .upload-btn {
+    background: #1e7e34 !important;
+  }
+  .transportation-actions .upload-btn:hover {
+    background: #17692b !important;
+  }
+  .transportation-actions .delete-task-btn {
+    background: #9b2c2c !important;
+  }
+  .transportation-actions .delete-task-btn:hover {
+    background: #822222 !important;
+  }
+}

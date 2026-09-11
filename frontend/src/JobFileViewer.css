@@ -1,0 +1,108 @@
+/* --- JobFileViewer.css --- */
+
+.file-viewer-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.file-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+}
+
+.file-viewer-header h2 {
+  margin: 0;
+  color: #4a90e2;
+  font-size: 28px;
+}
+
+/* Use the existing .back-btn style from App.css */
+
+.no-files-message {
+  text-align: center;
+  padding: 40px;
+  background-color: #fff;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #888;
+  font-style: italic;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.file-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.file-icon-wrapper {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.file-icon {
+  display: block;
+}
+
+.file-card-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin: 5px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #333;
+}
+
+.file-card-date {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 15px 0;
+}
+
+.file-card-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.view-btn, .delete-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  flex-grow: 1;
+}
+
+.view-btn {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.view-btn:hover {
+  background-color: #357abd;
+}
+
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c82333;
+}

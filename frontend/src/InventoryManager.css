@@ -1,0 +1,662 @@
+/* InventoryManager.css */
+
+.inventory-manager {
+    padding: 1rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-top: 0;
+}
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+.inventory-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: #333;
+}
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0 0.5rem;
+}
+.close-btn:hover { color: #333; }
+
+.low-stock-alert {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+}
+.low-stock-alert h3 {
+    margin: 0 0 0.5rem 0;
+    color: #856404;
+}
+.low-stock-alert ul {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+.low-stock-alert li {
+    margin-bottom: 0.25rem;
+    color: #856404;
+}
+
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+.alert-danger {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* ======== TOOLBAR WITH SEARCH ======== */
+.inventory-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+.toolbar-left {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.toolbar-right {
+    display: flex;
+    gap: 0.5rem;
+}
+.search-input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+/* ======================================== */
+
+.inventory-toolbar .primary,
+.inventory-toolbar .secondary {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.inventory-toolbar .primary {
+    background: #007bff;
+    color: white;
+}
+.inventory-toolbar .primary:hover {
+    background: #0069d9;
+}
+.inventory-toolbar .secondary {
+    background: #6c757d;
+    color: white;
+}
+.inventory-toolbar .secondary:hover {
+    background: #5a6268;
+}
+
+.inventory-form {
+    background: white;
+    padding: 1.25rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 1.5rem;
+}
+.inventory-form h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+.inventory-form .form-group {
+    margin-bottom: 1rem;
+}
+.inventory-form .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+.inventory-form .form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+.inventory-form .form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+.inventory-form .form-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+.inventory-form .form-actions button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.inventory-form .form-actions .primary {
+    background: #007bff;
+    color: white;
+}
+.inventory-form .form-actions .primary:hover {
+    background: #0069d9;
+}
+.inventory-form .form-actions .secondary {
+    background: #6c757d;
+    color: white;
+}
+.inventory-form .form-actions .secondary:hover {
+    background: #5a6268;
+}
+
+.inventory-table-wrapper {
+    overflow-x: auto;
+}
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.inventory-table th,
+.inventory-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: middle;
+}
+.inventory-table th {
+    background: #f1f1f1;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+}
+.inventory-table tr:hover {
+    background: #fafafa;
+}
+.inventory-table .low-stock-row {
+    background-color: #fff8f0;
+}
+.inventory-table .low-stock-row:hover {
+    background-color: #fef0e0;
+}
+
+/* ======== ACTION COLUMN — shifted right, vertically centred ======== */
+.inventory-table th:last-child,
+.inventory-table td:last-child {
+    text-align:revert;
+    vertical-align: middle;
+    padding-right: 1.5rem;   /* push content away from the edge */
+}
+/* ================================================================== */
+
+.quantity-badge {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-weight: bold;
+    background: #e9ecef;
+    color: #333;
+}
+.quantity-badge.low {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.media-badge {
+    display: inline-block;
+    font-size: 1.3rem;
+    margin-right: 0.2rem;
+    cursor: pointer;
+}
+.media-badge:hover {
+    transform: scale(1.1);
+}
+
+/* ======== ACTION BUTTONS — shifted right, icons centred ======== */
+.action-buttons {
+    display: inline-flex;          /* shrink-wrap to button row width  */
+    gap: 0.3rem;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;     /* push buttons toward right edge   */
+    margin-left: auto;             /* guarantee right-alignment         */
+}
+.action-buttons button {
+    display: inline-flex;          /* centre the emoji/icon inside     */
+    align-items: center;
+    justify-content: center;
+    background: #f1f1f1;
+    border: none;
+    border-radius: 4px;
+    padding: 0.25rem 0.45rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    min-width: 2rem;
+    min-height: 2rem;
+    line-height: 1;
+    transition: background 0.2s, transform 0.1s;
+    white-space: nowrap;
+}
+.action-buttons button:hover {
+    background: #ddd;
+    transform: scale(1.05);
+}
+.action-buttons .edit-btn {
+    background: #ffc107;
+    color: #333;
+}
+.action-buttons .edit-btn:hover {
+    background: #e0a800;
+}
+.action-buttons .upload-btn {
+    background: #17a2b8;
+    color: white;
+}
+.action-buttons .upload-btn:hover {
+    background: #138496;
+}
+.action-buttons .view-btn {
+    background: #6c757d;
+    color: white;
+}
+.action-buttons .view-btn:hover {
+    background: #5a6268;
+}
+.action-buttons .delete-btn {
+    background: #dc3545;
+    color: white;
+}
+.action-buttons .delete-btn:hover {
+    background: #c82333;
+}
+.action-buttons .stock-btn {
+    background: #e9ecef;
+    color: #333;
+    font-weight: bold;
+}
+.action-buttons .stock-btn:hover {
+    background: #d0d4d8;
+}
+/* ============================================================== */
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    animation: modalFadeIn 0.2s ease;
+}
+.modal-content.modal-lg {
+    max-width: 700px;
+}
+@keyframes modalFadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.modal-header {
+    padding: 1rem 1.5rem;
+    background: #007bff;
+    color: white;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+.modal-header .close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.2rem;
+    opacity: 0.8;
+}
+.modal-header .close-button:hover {
+    opacity: 1;
+}
+.modal-body {
+    padding: 1.5rem;
+}
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+.modal-actions button {
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+.modal-actions .primary {
+    background: #007bff;
+    color: white;
+}
+.modal-actions .primary:hover {
+    background: #0069d9;
+}
+.modal-actions .primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.modal-actions .secondary {
+    background: #6c757d;
+    color: white;
+}
+.modal-actions .secondary:hover {
+    background: #5a6268;
+}
+
+/* Upload media form */
+.upload-media-form .form-group {
+    margin-bottom: 1.2rem;
+}
+.upload-media-form .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+.signature-canvas-container {
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    touch-action: none;
+    margin-bottom: 0.5rem;
+}
+.signature-canvas-container canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    touch-action: none;
+}
+.file-input {
+    display: block;
+    width: 100%;
+    padding: 0.4rem 0;
+}
+.image-preview-container {
+    margin-top: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    background: #fafafa;
+    display: inline-block;
+}
+.image-preview {
+    max-width: 150px;
+    max-height: 150px;
+    display: block;
+    border-radius: 4px;
+}
+.form-hint {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.3rem;
+}
+.small {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+}
+
+/* Preview modal */
+.preview-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.preview-section {
+    text-align: center;
+}
+.preview-section h4 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+.preview-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.no-media {
+    color: #999;
+    font-style: italic;
+}
+
+/* ===== TAB BAR ===== */
+.tab-bar {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1.5rem 0 2rem 0;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 2rem;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.tab-btn:hover {
+    background: #f0f0f0;
+    color: #222;
+}
+
+.tab-btn.active {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+    padding: 0.75rem 2.5rem;
+    font-size: 1.2rem;
+}
+
+.tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #007bff;
+    border-radius: 2px;
+}
+
+/* =========================================================
+   COUNT PROMPT MODAL (Add Items)
+   ========================================================= */
+.count-prompt-box {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    margin: 0 auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.count-prompt-box h4 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: #1e293b;
+}
+
+.count-prompt-input {
+    margin: 1.5rem 0;
+}
+
+.count-prompt-input input {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.count-prompt-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.count-prompt-actions button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* =========================================================
+   BULK CREATE ROWS (inside inventory-form)
+   ========================================================= */
+.bulk-create-rows {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 1rem 0;
+    padding-right: 4px;
+}
+
+.bulk-create-rows .item-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: #f8fafc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 0.5rem;
+}
+
+.bulk-create-rows .item-row .form-input {
+    padding: 6px 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.bulk-create-rows .item-row .delete-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 6px;
+    line-height: 1;
+}
+
+.bulk-create-rows .item-row .delete-btn:hover {
+    color: #dc2626;
+}
+
+@media (max-width: 600px) {
+    .modal-content {
+        margin: 0.5rem;
+        max-height: 95vh;
+    }
+    .inventory-table th,
+    .inventory-table td {
+        padding: 0.4rem 0.4rem;
+        font-size: 0.85rem;
+    }
+    .action-buttons button {
+        padding: 0.1rem 0.3rem;
+        font-size: 0.75rem;
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+    }
+    .inventory-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .toolbar-left, .toolbar-right {
+        width: 100%;
+        justify-content: center;
+    }
+    .search-input {
+        width: 100%;
+        min-width: unset;
+    }
+    .inventory-table th:last-child,
+    .inventory-table td:last-child {
+        padding-right: 0.5rem;
+    }
+
+    .bulk-create-rows .item-row {
+        flex-wrap: wrap;
+    }
+    .bulk-create-rows .item-row .form-input {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+    .count-prompt-box {
+        padding: 1.5rem;
+    }
+}
