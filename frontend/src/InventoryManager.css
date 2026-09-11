@@ -15,8 +15,8 @@
 }
 .inventory-header h2 {
     margin: 0;
-    font-size: 1.5rem;
-    color: #333;
+    font-size: 1.15rem;
+    color: #0f172a;
 }
 .close-btn {
     background: none;
@@ -186,16 +186,18 @@
 }
 .inventory-table th,
 .inventory-table td {
-    padding: 0.6rem 0.8rem;
-    border-bottom: 1px solid #eee;
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f5f9;
     text-align: left;
     vertical-align: middle;
+    font-size: 12px;
 }
 .inventory-table th {
-    background: #f1f1f1;
+    background: #f8fafc;
     font-weight: 600;
-    color: #333;
-    border-bottom: 2px solid #ddd;
+    font-size: 11px;
+    color: #64748b;
+    border-bottom: 1px solid #f1f5f9;
 }
 .inventory-table tr:hover {
     background: #fafafa;
@@ -481,47 +483,49 @@
 /* ===== TAB BAR ===== */
 .tab-bar {
     display: flex;
-    gap: 0.5rem;
-    margin: 1.5rem 0 2rem 0;
-    border-bottom: 2px solid #e0e0e0;
-    padding-bottom: 0.5rem;
+    gap: 4px;
+    margin: 0 0 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0;
 }
 
 .tab-btn {
-    padding: 0.75rem 2rem;
+    padding: 8px 12px;
     border: none;
     background: transparent;
-    font-size: 1.1rem;
+    font-size: 12px;
     font-weight: 600;
-    color: #555;
+    color: #64748b;
     cursor: pointer;
-    border-radius: 8px 8px 0 0;
-    transition: all 0.2s ease;
+    border-radius: 0;
+    transition: color 0.15s ease;
     position: relative;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
 }
 
 .tab-btn:hover {
-    background: #f0f0f0;
-    color: #222;
+    background: transparent;
+    color: #0f172a;
 }
 
 .tab-btn.active {
-    background: #007bff;
-    color: white;
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
-    padding: 0.75rem 2.5rem;
-    font-size: 1.2rem;
+    background: transparent;
+    color: #3730a3;
+    box-shadow: none;
+    padding: 8px 12px;
+    font-size: 12px;
 }
 
 .tab-btn.active::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -1px;
     left: 0;
     right: 0;
-    height: 3px;
-    background: #007bff;
-    border-radius: 2px;
+    height: 2px;
+    background: #4f46e5;
+    border-radius: 0;
 }
 
 /* =========================================================

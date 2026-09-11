@@ -440,170 +440,163 @@
    TABLE & OTHER STYLES (with new action buttons)
    ========================================================= */
 .admin-page {
-    padding: 20px;
+    padding: 0;
     max-width: 1400px;
     margin: 0 auto;
+    font-size: 13px;
+    color: #334155;
 }
 
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    margin: 0 0 10px 0;
-    color: #333;
-}
-
-.page-header p {
-    margin: 0;
-    color: #666;
-}
-
-.table-header-row {
+.admin-page .page-header {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 15px;
+    margin-bottom: 12px;
+    gap: 12px;
 }
 
-.table-header-row h2 {
+.admin-page .page-header h1 {
     margin: 0;
-    color: #333;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.02em;
 }
 
-.create-icon-btn {
-    background-color: #4caf50;
-    color: white;
+.admin-page .page-header p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.admin-page .search-container {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 0;
+    background: transparent;
     border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
+    box-shadow: none;
+}
+
+.admin-page .search-input {
+    width: 100%;
+    padding: 7px 32px 7px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 13px;
+    background: #fff;
+}
+
+.admin-page .clear-search {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
     cursor: pointer;
+    color: #64748b;
     font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 5px;
 }
 
-.create-icon-btn:hover {
-    background-color: #45a049;
-}
-
-.project-table-container {
-    overflow-x: auto;
-    overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.admin-page .project-table-container {
+    overflow: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     max-height: 70vh;
+    background: #fff;
 }
 
-table {
+.admin-page table.admin-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 12px;
 }
 
-thead {
-    background-color: #f5f5f5;
+.admin-page .admin-table thead {
+    background: #f8fafc;
 }
 
-th {
-    padding: 12px 15px;
+.admin-page .admin-table th {
+    padding: 8px 10px;
     text-align: left;
     font-weight: 600;
-    color: #333;
-    border-bottom: 2px solid #ddd;
+    font-size: 11px;
+    color: #64748b;
+    border-bottom: 1px solid #f1f5f9;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
 }
 
-td {
-    padding: 12px 15px;
-    border-bottom: 1px solid #ddd;
-    vertical-align: top;
+.admin-page .admin-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
-tbody tr:hover {
-    background-color: #f9f9f9;
+.admin-page .admin-table tbody tr:hover td {
+    background: #f8fafc;
 }
 
-/* =========================================================
-   ACTION BUTTONS (new professional style)
-   ========================================================= */
-.action-cell {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+.admin-page .action-cell {
+    text-align: right;
+    width: 1%;
 }
 
-.action-btn {
+.admin-page .row-actions {
+    display: inline-flex;
+    justify-content: flex-end;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.admin-page .action-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
-    padding: 6px 14px;
+    padding: 4px 8px;
     border: 1px solid transparent;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: transparent;
+    transition: all 0.15s ease;
+    background: #fff;
     white-space: nowrap;
-    min-width: 70px;
+    min-width: 0;
     text-decoration: none;
+    line-height: 1.2;
 }
 
-/* View button */
-.action-btn.view-btn {
-    color: #0d6efd;
-    border-color: #0d6efd;
-    background: rgba(13, 110, 253, 0.06);
+.admin-page .action-btn.view-btn {
+    color: #1d4ed8;
+    border-color: #bfdbfe;
+    background: #eff6ff;
 }
-.action-btn.view-btn:hover {
-    background: #0d6efd;
+.admin-page .action-btn.view-btn:hover {
+    background: #1d4ed8;
     color: #fff;
-    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-    transform: translateY(-1px);
 }
 
-/* Edit button */
-.action-btn.edit-btn {
-    color: #198754;
-    border-color: #198754;
-    background: rgba(25, 135, 84, 0.06);
+.admin-page .action-btn.edit-btn {
+    color: #334155;
+    border-color: #e2e8f0;
+    background: #fff;
 }
-.action-btn.edit-btn:hover {
-    background: #198754;
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(25, 135, 84, 0.3);
-    transform: translateY(-1px);
+.admin-page .action-btn.edit-btn:hover {
+    background: #f8fafc;
 }
 
-/* Delete button */
-.action-btn.delete-btn {
-    color: #dc3545;
-    border-color: #dc3545;
-    background: rgba(220, 53, 69, 0.06);
+.admin-page .action-btn.delete-btn {
+    color: #b91c1c;
+    border-color: #fecaca;
+    background: #fff;
 }
-.action-btn.delete-btn:hover {
+.admin-page .action-btn.delete-btn:hover {
     background: #dc3545;
     color: #fff;
-    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
-    transform: translateY(-1px);
-}
-
-/* Optional: active/click state */
-.action-btn:active {
-    transform: scale(0.96);
-}
-
-/* If you use icon-only buttons, adjust padding */
-.action-btn.icon-only {
-    min-width: 36px;
-    padding: 6px 8px;
-    font-size: 16px;
 }
 
 /* =========================================================
@@ -718,15 +711,9 @@ input[type="number"] {
         max-width: 80px;
         max-height: 40px;
     }
-    /* Action buttons stack */
-    .action-cell {
-        flex-direction: column;
-        gap: 5px;
-    }
-    .action-btn {
-        width: 100%;
-        justify-content: center;
-        min-width: auto;
+    .admin-page .row-actions {
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 }
 
@@ -738,9 +725,9 @@ input[type="number"] {
         padding: 14px 20px;
         font-size: 15px;
     }
-    .action-btn {
+    .admin-page .action-btn {
         font-size: 12px;
-        padding: 5px 10px;
+        padding: 4px 8px;
     }
 }
 

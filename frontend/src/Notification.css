@@ -660,7 +660,7 @@
 }
 
 /* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) and (min-width: 100000px) {
   .notification-page {
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   }

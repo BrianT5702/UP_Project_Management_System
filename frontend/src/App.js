@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import DashboardApp from './DashboardPage';
 import './LoginPage.css';
+import { getStoredTheme, applyTheme, toggleThemeValue } from './theme';
 
 // =========================================================
 // API Service (minimal – only auth)
@@ -59,6 +60,7 @@ const useSimpleRouter = () => {
 // Login Form (with Approval Flow)
 // =========================================================
 const LoginForm = ({ onLogin }) => {
+  const [theme, setTheme] = useState(getStoredTheme);
   const [mode, setMode] = useState('signin');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -159,6 +161,14 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <div className="login-page">
+      <button
+        type="button"
+        className="theme-fab"
+        onClick={() => setTheme((current) => applyTheme(toggleThemeValue(current)))}
+        title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+      >
+        {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+      </button>
       <div className="login-container">
         <div className="login-card">
           <div className="login-brand">
@@ -166,7 +176,7 @@ const LoginForm = ({ onLogin }) => {
             <p>Project Management System</p>
           </div>
 
-          <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#333' }}>
+          <h2 className="login-heading">
             {heading}
           </h2>
 

@@ -15,6 +15,7 @@ import AIChatWindow from './AIChatWindow';
 import StockPage from './StockPage';
 import SuperadminDashboard from './SuperadminDashboard';
 import { viewPanelAPI, getUserPosition } from '../src/apiService';
+import { getStoredTheme, applyTheme, toggleThemeValue } from './theme';
 
 const API_BASE = '/api';
 
@@ -2714,6 +2715,7 @@ function App({ onLogout }) {
   const [editingProject, setEditingProject] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [theme, setTheme] = useState(getStoredTheme);
   const [isPanelEditLocked, setIsPanelEditLocked] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
   const [activeTab, setActiveTab] = useState('approved');
@@ -3117,13 +3119,10 @@ function App({ onLogout }) {
                   style={{
                     background: style.bg,
                     color: style.text,
-                    padding: '4px 12px',
                     borderRadius: '20px',
-                    fontSize: '0.85rem',
                     fontWeight: 600,
                     display: 'inline-block',
                     border: 'none',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                   }}
                 >
                   {project.poPayment}
@@ -3149,26 +3148,24 @@ function App({ onLogout }) {
           </div>
         </td>
         <td className="remarks-cell" title={project.remarks || ''}>{truncatedRemarks}</td>
-        <td onClick={e => e.stopPropagation()}>
+        <td className="sa-col-actions" onClick={e => e.stopPropagation()}>
           {isAdmin ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+            <div className="row-actions">
               <button
                 onClick={() => setStatusUpdateModal({ isOpen: true, project })}
                 className="btn-status btn-sm"
-                style={{ width: '100%' }}
               >
                 Status
               </button>
               <button
                 onClick={() => startDeleteConfirmation(project.id, project.projectNo)}
                 className="btn-danger btn-sm"
-                style={{ width: '100%' }}
               >
                 Delete
               </button>
             </div>
           ) : (
-            <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>View only</span>
+            <span style={{ color: '#94a3b8', fontSize: '12px' }}>View only</span>
           )}
         </td>
       </tr>
@@ -3211,6 +3208,14 @@ function App({ onLogout }) {
           ))}
         </nav>
         <div className="sidebar-footer">
+          <button
+            className="nav-item theme-toggle"
+            onClick={() => setTheme((current) => applyTheme(toggleThemeValue(current)))}
+            title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+          >
+            <span className="nav-icon">{theme === 'dark' ? '☀️' : '🌙'}</span>
+            {isSidebarOpen && <span className="nav-label">{theme === 'dark' ? 'Light theme' : 'Dark theme'}</span>}
+          </button>
           <button className="nav-item logout-btn" onClick={() => onLogout && onLogout()} title={!isSidebarOpen ? 'Log Out' : undefined}>
             <span className="nav-icon">🚪</span>
             {isSidebarOpen && <span className="nav-label">Log Out</span>}

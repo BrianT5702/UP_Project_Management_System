@@ -1,8 +1,28 @@
 .production-page-container {
-  padding: 1rem;
+  padding: 0;
+  font-size: 13px;
+}
+.production-page-container .page-header {
+  margin-bottom: 12px;
+}
+.production-page-container .page-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+.production-page-container .back-btn {
+  background: #fff;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
 }
 .filters-section {
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
 }
 .filter-row {
   display: flex;

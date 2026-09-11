@@ -662,17 +662,13 @@ const AdminPage = ({ navigate }) => {
     return (
         <div className="admin-page" style={{ position: 'relative' }}>
             <header className="page-header">
-                <h1>⚙️ Projects Administration</h1>
-                <div className="project-stats">
-                    <span className="stat-item">📊 Total Entries: <strong>{jobs.length}</strong></span>
-                    <span className="stat-item">📄 Page {currentPage} of {totalPages || 1}</span>
+                <div>
+                    <h1>Projects Administration</h1>
+                    <p>{jobs.length} entries · Page {currentPage} of {totalPages || 1}</p>
                 </div>
             </header>
             <main className="admin-content">
                 <div className="admin-section project-table-section">
-                    <div className="table-header-row">
-                        <h2>Projects Ledger</h2>
-                    </div>
                     <div className="search-container">
                         <input
                             type="text"
@@ -714,9 +710,11 @@ const AdminPage = ({ navigate }) => {
                                                             <td key={`${job.jobNo}-${col}`}>{data[col]}</td>
                                                     ))}
                                                     <td className="action-cell">
-                                                        <button onClick={() => handleViewFiles(job.jobNo)} className="action-btn view-btn" title="View Files">📁 View Files</button>
-                                                        <button onClick={() => openEditModal(job)} className="action-btn edit-btn" title="Edit Job">✏️ Edit</button>
-                                                        <button onClick={() => handleDeleteJob(job.jobNo)} className="action-btn delete-btn" title="Delete Job">🗑️ Delete</button>
+                                                        <div className="row-actions">
+                                                            <button onClick={() => handleViewFiles(job.jobNo)} className="action-btn view-btn" title="View Files">Files</button>
+                                                            <button onClick={() => openEditModal(job)} className="action-btn edit-btn" title="Edit Job">Edit</button>
+                                                            <button onClick={() => handleDeleteJob(job.jobNo)} className="action-btn delete-btn" title="Delete Job">Delete</button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             );

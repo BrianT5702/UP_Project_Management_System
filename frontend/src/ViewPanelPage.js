@@ -572,44 +572,26 @@ const JobOverviewContent = ({
                                         width: '65px',
                                     }}>
                                         {isEditing ? (
-                                            // Editing mode: Save & Cancel (still stacked)
-                                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                                                <button onClick={handleSaveEdit} style={{ fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer' }} title="Save">💾</button>
-                                                <button onClick={handleCancelEdit} style={{ fontSize: '14px', background: 'none', border: 'none', cursor: 'pointer' }} title="Cancel">❌</button>
+                                            <div className="row-actions">
+                                                <button onClick={handleSaveEdit} title="Save">💾</button>
+                                                <button onClick={handleCancelEdit} title="Cancel">❌</button>
                                             </div>
                                         ) : (
-                                            // Actions: two icons in a row, third below
-                                            <div style={{
-                                                display: 'grid',
-                                                gridTemplateColumns: '1fr 1fr',
-                                                gap: '2px',
-                                                justifyItems: 'center',
-                                                alignItems: 'center',
-                                            }}>
+                                            <div className="row-actions">
                                                 <button
                                                     onClick={() => openDuplicateModal(panel)}
-                                                    style={{ fontSize: '16px', background: 'none', border: 'none', cursor: 'pointer' }}
                                                     title="Duplicate"
                                                 >
                                                     ⎘
                                                 </button>
                                                 <button
                                                     onClick={() => handlePrint(panel)}
-                                                    style={{ fontSize: '16px', background: 'none', border: 'none', cursor: 'pointer' }}
                                                     title="Print"
                                                 >
                                                     🖨️
                                                 </button>
                                                 <button
                                                     onClick={() => handleDeletePanel(panel.id)}
-                                                    style={{
-                                                        fontSize: '16px',
-                                                        background: 'none',
-                                                        border: 'none',
-                                                        cursor: 'pointer',
-                                                        gridColumn: '1 / -1',  // spans both columns, appears on its own row
-                                                        justifySelf: 'center',
-                                                    }}
                                                     title="Delete"
                                                 >
                                                     🗑️
@@ -1839,18 +1821,18 @@ const ViewPanelPage = ({ onBack, onEditingChange }) => {
 
             {success && <div className="alert alert-success global-success">{success}</div>}
 
-            <div className="view-toggle-buttons" style={{ display: 'flex', justifyContent: 'center', gap: '1rem', margin: '1rem 0' }}>
+            <div className="view-toggle-buttons">
                 <button
                     className={`btn btn-primary ${activeView === 'table' ? 'active' : ''}`}
                     onClick={() => setActiveView('table')}
                 >
-                    Click Here To View All The Panel
+                    Panels
                 </button>
                 <button
                     className={`btn btn-secondary ${activeView === 'productionMeter' ? 'active' : ''}`}
                     onClick={() => setActiveView('productionMeter')}
                 >
-                    Check Production Meter By Date
+                    Production meter
                 </button>
             </div>
 
