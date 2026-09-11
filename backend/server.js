@@ -139,11 +139,11 @@ app.get('/', (req, res) => {
 });
 
 // Mount each router at /api/... and at /... so both nginx styles work:
-// - /api/auth/register (new frontend + no-strip proxy)
-// - /auth/register     (old production patch + /api/ strip)
+// - /api/auth/register (CRA proxy, no strip)
+// - /auth/register     (production nginx strips /api/auth -> /auth)
+// Use one mount with both prefixes. Mounting the same router twice is unreliable.
 function mountApi(path, router) {
-    app.use(`/api${path}`, router);
-    app.use(path, router);
+    app.use([`/api${path}`, path], router);
 }
 
 // ---------- Mount Auth routes (PUBLIC) ----------
