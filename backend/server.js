@@ -138,28 +138,36 @@ app.get('/', (req, res) => {
     res.json({ message: 'Project Tracker API', version: '1.0.0', websocket: '/socket.io' });
 });
 
+// Mount each router at /api/... and at /... so both nginx styles work:
+// - /api/auth/register (new frontend + no-strip proxy)
+// - /auth/register     (old production patch + /api/ strip)
+function mountApi(path, router) {
+    app.use(`/api${path}`, router);
+    app.use(path, router);
+}
+
 // ---------- Mount Auth routes (PUBLIC) ----------
-app.use('/api/auth', authRoutes);
+mountApi('/auth', authRoutes);
 
 // ---------- Mount REST routes ----------
-// (All routes are mounted without auth middleware for now; you can add authMiddleware as needed)
-app.use('/api/projects', projectRoutes);
-app.use('/api/panels', panelsRouter);
-app.use('/api/panel-tasks', panelTasksRoutes);
-app.use('/api/door-tasks', doorTasksRouter);
-app.use('/api/accessories-tasks', accessoriesTasksRouter);
-app.use('/api/cutting-tasks', cuttingTasksRouter);
-app.use('/api/strip-curtain-tasks', stripCurtainTasksRouter);
-app.use('/api/system-tasks', systemTasksRouter);
-app.use('/api/transportation-tasks', transportationTasksRouter);
-app.use('/api/stock', stockRoutes);
-app.use('/api/inventory', inventoryRouter);
-app.use('/api/admin/projects', adminProjectRoutes);
-app.use('/api/activity-logs', activityLogsRouter);
-app.use('/api/subtasks', subTasksRouter);
-app.use('/api/orders', orderRouter);
+mountApi('/projects', projectRoutes);
+mountApi('/panels', panelsRouter);
+mountApi('/panel-tasks', panelTasksRoutes);
+mountApi('/door-tasks', doorTasksRouter);
+mountApi('/accessories-tasks', accessoriesTasksRouter);
+mountApi('/cutting-tasks', cuttingTasksRouter);
+mountApi('/strip-curtain-tasks', stripCurtainTasksRouter);
+mountApi('/system-tasks', systemTasksRouter);
+mountApi('/transportation-tasks', transportationTasksRouter);
+mountApi('/stock', stockRoutes);
+mountApi('/inventory', inventoryRouter);
+mountApi('/admin/projects', adminProjectRoutes);
+mountApi('/activity-logs', activityLogsRouter);
+mountApi('/subtasks', subTasksRouter);
+mountApi('/orders', orderRouter);
+mountApi('/ai', aiRouter);
 app.use('/api', excelDataRouter);
-app.use('/api/ai', aiRouter);
+app.use('/', excelDataRouter);
 
 // ---------- Socket.IO ----------
 io.on('connection', (socket) => {
